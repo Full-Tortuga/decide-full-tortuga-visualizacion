@@ -273,6 +273,10 @@ Puede probar que funcione haciendo una petición desde Postman
 
 ---
 
+## Configurar Bot de Telegram 
+
+Para que Django pueda ejecutar sin problemas a la hora de iniciar la aplicación o hacer migraciones es necesario configurar el token del bot como una variable de entorno mediante un fichero .env que contenga el token (no publicado por aquí) para su funcionamiento empleando la aplicación en local o en su defecto un secreto de repositorio para que funcione en GitHub (ya añadido para el repositorio central).
+
 ## Ejecutar con docker
 
 
