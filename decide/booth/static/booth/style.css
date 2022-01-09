@@ -36,3 +36,16 @@
 .chartjs-render-monitor{
     margin: 77px 10px; 
 }
+
+.index-pre-list{
+    text-align: center; 
+    padding: 10px;
+}
+
+#index-title{
+    padding: 30px;
+}
+
+#index-p, .index-list{
+    font-size: x-large;
+}
