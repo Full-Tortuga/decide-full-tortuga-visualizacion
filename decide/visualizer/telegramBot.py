@@ -13,7 +13,7 @@ from threading import Thread
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from functools import partial
-from local_settings import BASEURL as LOCALURL
+from decide.settings import BASEURL as LOCALURL
 from dotenv import load_dotenv
 
 

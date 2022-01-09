@@ -19,3 +19,4 @@ selenium==3.14.0
 gunicorn
 django-heroku
 python-dotenv
+dnspython
