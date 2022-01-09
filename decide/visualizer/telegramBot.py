@@ -1,16 +1,19 @@
 from django.conf import settings
 from django.db.models import Count
+from selenium.webdriver.chrome.webdriver import WebDriver
 from voting import models
 from store import models as stmodels
 from telegram import InputMediaPhoto, Bot
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 from telegram.inline.inlinekeyboardbutton import InlineKeyboardButton
 from telegram.inline.inlinekeyboardmarkup import InlineKeyboardMarkup
-import os, sys, base64
-from .models import TelegramBot, Graphs
+import os, sys, base64, requests
+from .models import TelegramBot
 from threading import Thread
 from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
 from functools import partial
+from decide.settings import BASEURL as LOCALURL
 from dotenv import load_dotenv
 
 
@@ -22,7 +25,6 @@ UPDATER = Updater(os.environ['TELEGRAM_TOKEN'],
 
 BOT=Bot(token=os.environ['TELEGRAM_TOKEN'])
 
-URL='http://127.0.0.1:8000/visualizer/'
 
 #configures and activate '@VotitosBot' to receive any messages from users
 def init_bot():
@@ -111,7 +113,7 @@ def results_query_handler(update, context):
     query=update.callback_query
     query.answer("¡A la orden!")
     response_array=query.data.split("_")
-    results_graph(query.data[0], query.data[1], query.message.chat_id, context)
+    results_graph(response_array[0], response_array[1], query.message.chat_id, context)
 
 #allows you to select an active or closed voting and show its details    
 def show_details(update, context, chat_identifier,vot_type):
@@ -214,7 +216,7 @@ def aux_message_builder(voting, vot_type):
   
     opt_msg=""
     for i,o in enumerate(options,1): 
-        opt_msg+="  " + str(i)+". " + o+"\n"
+        opt_msg+="  " + str(i)+". " + str(o)+"\n"
     
     msg="<b>{}\n\n</b><b><i>Descripción:</i></b> {}\n<b><i>Pregunta:</i></b> {}\n".format(str(voting.name).upper(), voting.desc, str(voting.question)) 
     msg+="<b><i>Opciones:</i></b>\n{}\n".format(opt_msg)
@@ -225,9 +227,8 @@ def aux_message_builder(voting, vot_type):
 
 #extracts graph's images from website selected voting and sends them to the user
 def results_graph(id, vot_type, chat_identifier, context):
-    open_graphs_generator_view(id, vot_type)
-    if Graphs.objects.filter(voting_id=id).exists():
-        graphs_base64=Graphs.objects.filter(voting_id=id).values('graphs_url')
+    graphs_base64=open_graphs_generator_view(id, vot_type)
+    if graphs_base64 is not None:
         try:
             base64_url_list=eval(graphs_base64[0]['graphs_url'])
             b64_images=[]
@@ -251,11 +252,24 @@ def results_graph(id, vot_type, chat_identifier, context):
 
 #uses selenium to call view which generates voting graphs
 def open_graphs_generator_view(id, vot_type):
-    options = webdriver.ChromeOptions()
-    options.add_argument("--headless")
-    driver=webdriver.Chrome(options=options)
-    view_url=translate_to_url(vot_type)
-    driver.get(view_url + str(id)) 
+    
+    res=None
+    try:
+        url=check_url_in_use()
+        type=translate_to_type(vot_type)[0]
+        options = webdriver.ChromeOptions()
+        options.add_argument("--headless")
+        driver=webdriver.Chrome(options=options)
+        view_url=translate_to_url(vot_type)
+        driver.get(view_url + str(id)) 
+        WebDriverWait(driver,3)
+        driver.quit()
+        res=requests.get(url + "/visualizer/graphs/?format=json&voting_id=" + str(id)+ "&voting_type="+ type).json()
+
+    except:
+        pass
+
+    return res
     
 #sends notifications when a new voting is created
 def auto_notifications(voting):
@@ -294,12 +308,22 @@ def translate_to_type(vot_type):
 
 #translate vot_type var to url of that type
 def translate_to_url(vot_type):
+    url=check_url_in_use()
     if 'binary' in vot_type:
-        res=URL+'binaryVoting/'
+        res=url+'/visualizer/binaryVoting/'
     elif 'multiple' in vot_type:
-        res=URL+'multipleVoting/'
+        res=url+'/visualizer/multipleVoting/'
     elif 'score' in vot_type:
-        res=URL+'scoreVoting/'
+        res=url+'/visualizer/scoringVoting/'
     else:
-        res=URL
+        res=url+'/visualizer/'
     return res
+
+#checks if Heroku app or local is active
+def check_url_in_use(): 
+    try:
+        requests.get(settings.BASEURL) 
+        url=settings.BASEURL
+    except:
+        url=LOCALURL 
+    return url

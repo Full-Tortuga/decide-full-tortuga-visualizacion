@@ -14,6 +14,7 @@ urlpatterns = [
     path('multipleVoting/<int:voting_id>/', VisualizerViewMultiple.as_view()),
     path('votes/multipleVoting/<int:voting_id>/', VotesMultiple_csv.as_view()),
     path('startTelegram/', initialize, name="start_telegram"),
+    path('graphs/', GraphViewSet.as_view({'get':'list'})),
     path('<int:voting_id>/graphs/', graphs_requests),
     path('binaryVoting/<int:voting_id>/graphs/', graphs_requests),
     path('scoringVoting/<int:voting_id>/graphs/', graphs_requests),

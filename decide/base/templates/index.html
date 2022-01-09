@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block extrahead %}
+    <link type="text/css" rel="stylesheet"
+         href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet"
+         href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
+    <link type="text/css" rel="stylesheet" href="{% static "booth/style.css" %}" />
+{% endblock %}
+
+{% block content %}
+<div id="app-index">
+    <b-navbar type="dark" variant="secondary" style="padding: 10px;">
+        <b-navbar-brand tag="h1">Decide</b-navbar-brand>
+    </b-navbar>
+    <div class="index-pre-list">
+        <h1 id="index-title">Decide-full-tortuga-2 - Módulo de Visualización</h1>
+        <p id="index-p">Bienvenido a la aplicación Decide del grupo full-tortuga-2.
+            <br>La lista de direcciones disponibles es la siguiente:</p>
+        <ul class="index-list">
+            {% for url in urls %}
+                <li>{{url}}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block extrabody %}
+    <!-- Vuejs -->
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#app-index',
+            data: {},
+        })
+    </script>
+</body>
+{% endblock %}

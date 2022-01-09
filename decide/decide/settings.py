@@ -16,6 +16,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
@@ -28,6 +29,7 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 CORS_ORIGIN_ALLOW_ALL = True
+
 
 
 # Application definition
@@ -133,7 +135,7 @@ DATABASES = {
         'ENGINE': 'djongo',
         "CLIENT": {
            "name": 'decide',
-           "host": 'mongodb+srv://decide:@decide.3vypb.mongodb.net/decide?retryWrites=true&w=majority',
+           "host": 'mongodb+srv://decide:decide@decide.bi7xm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
            "username": 'decide',
            "password": 'decide',
            "authMechanism": "SCRAM-SHA-1",
