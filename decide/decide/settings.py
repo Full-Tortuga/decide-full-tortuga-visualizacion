@@ -79,10 +79,12 @@ MODULES = [
     'store',
     'visualizer',
     'voting','''
+    
 
-BASEURL = 'http://decide-full-tortuga-2.herokuapp.com'
+BASEURL = 'http://localhost:8000'
 
 APIS = {
+    'administration': BASEURL,
     'authentication': BASEURL,
     'base': BASEURL,
     'booth': BASEURL,
@@ -93,6 +95,7 @@ APIS = {
     'visualizer': BASEURL,
     'voting': BASEURL,
 }
+
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',  # added to solve CORS
@@ -137,13 +140,10 @@ WSGI_APPLICATION = 'decide.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        "CLIENT": {
-           "name": 'decide',
-           "host": 'mongodb+srv://decide:@decide.3vypb.mongodb.net/decide?retryWrites=true&w=majority',
-           "username": 'decide',
-           "password": 'decide',
-           "authMechanism": "SCRAM-SHA-1",
-        }, 
+        'NAME': 'prueba',
+        'CLIENT': {
+            'host': '127.0.0.1',
+        }
     }
 }
 
@@ -170,7 +170,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Europe/Madrid'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
@@ -207,10 +207,3 @@ if os.path.exists("config.jsonnet"):
         vars()[k] = v
 
 INSTALLED_APPS = INSTALLED_APPS + MODULES
-
-NOSE_ARGS = [
-    '--with-xunit'
-]
-
-import django_heroku
-django_heroku.settings(locals(), test_runner=False)

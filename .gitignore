@@ -57,7 +57,7 @@ coverage.xml
 
 # Django stuff:
 *.log
-decide/*/migrations
+decide/local_settings.py
 
 migrations/
 
@@ -107,10 +107,8 @@ ENV/
 # mypy
 .mypy_cache/
 
-.vagrant
 
-#node
-nodesource_setup.sh
+.vagrant
 
 # new db migrations
 decide/*/migrations/0001_initial.py
