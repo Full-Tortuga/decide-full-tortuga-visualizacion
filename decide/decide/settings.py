@@ -135,7 +135,7 @@ DATABASES = {
         'ENGINE': 'djongo',
         "CLIENT": {
            "name": 'decide',
-           "host": 'mongodb+srv://decide:decide@decide.bi7xm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+           "host": 'mongodb+srv://decide:decide@decide.bi7xm.mongodb.net/decide?retryWrites=true&w=majority',
            "username": 'decide',
            "password": 'decide',
            "authMechanism": "SCRAM-SHA-1",
